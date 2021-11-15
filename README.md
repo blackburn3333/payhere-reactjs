@@ -1,6 +1,6 @@
 # PayHere React JS example demo
 
-This is a example for intergrating PayHere with ReactJS
+This is a example for integrating PayHere with ReactJS
 
 ## Steps
 1) Clone the project
