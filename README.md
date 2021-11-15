@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# PayHere React JS example demo
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a example for intergrating PayHere with ReactJS
 
-## Available Scripts
+## Steps
+1) Clone the project
+2) npm install
 
-In the project directory, you can run:
 
-### `yarn start`
+## How to perform your own ReactJs - PayHere Integration.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 1. In your `index.html` file, include the [PayHere JavaScript SDK](https://support.payhere.lk/api-&-mobile-sdk/payhere-javascript)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  ...
+  <!-- Add this line -->
+  <script src="https://www.payhere.lk/lib/payhere.js"></script>
+</head>
+...
+</html>
 
-### `yarn test`
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 2. In your ReactJS code import PayHere object using window global object.
 
-### `yarn build`
+```js
+ window.payhere.startPayment(payment_object);
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 3. Use the PayHere JS SDK normally.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Example:
+```js
+const payment_object = {
+            "sandbox": true,
+            "preapprove": true,
+            "merchant_id": "1213098",    // Replace your Merchant ID
+            "return_url": 'return url after payment',     // Important
+            "cancel_url": 'cancel url when payment cancelled',     // Important
+            "notify_url": "url to notify payment status and information",
+            "order_id": "ItemNo12345",
+            "items": "Door bell wireles",
+            "amount": "1000.00",
+            "currency": "LKR",
+            "first_name": "Saman",
+            "last_name": "Perera",
+            "email": "samanp@gmail.com",
+            "phone": "0771234567",
+            "address": "No.1, Galle Road",
+            "city": "Colombo",
+            "country": "Sri Lanka",
+            "delivery_address": "No. 46, Galle road, Kalutara South",
+            "delivery_city": "Kalutara",
+            "delivery_country": "Sri Lanka",
+            "custom_1": "",
+            "custom_2": ""
+        };
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+ window.payhere.startPayment(payment_object);
 
-### `yarn eject`
+        window.payhere.onCompleted = function onCompleted(orderId) {
+            console.log("Payment completed. OrderID:" + orderId);
+            alert("New Payhere payment: OrderID: " + orderId)
+            //Note: validate the payment and show success or failure page to the customer
+        };
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+        // Called when user closes the payment without completing
+        window.payhere.onDismissed = function onDismissed() {
+            //Note: Prompt user to pay again or show an error page
+            console.log("Payment dismissed");
+        };
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+        // Called when error happens when initializing payment such as invalid parameters
+        window.payhere.onError = function onError(error) {
+            // Note: show an error page
+            console.log("Error:" + error);
+        };
+```
